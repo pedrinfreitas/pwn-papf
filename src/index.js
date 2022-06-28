@@ -8,5 +8,5 @@ app.get("/", (request, response) => {
 });
 
 app.listen(port, () => {
-  console.info("App rodando na porta 3333");
+  console.info(`App rodando na porta ${port}`);
 });
