@@ -19,19 +19,21 @@
       <details>
         <summary class="color-post">POST - REGISTRO</summary>
         <p>
-          curl --request POST \ --url http://localhost:3333/auth/registro \
-          --header 'Content-Type: application/json' \ --data ' { "nome": "teste
-          login", "email": "pedrinfreitas@gmail.com", "login": "teste", "senha":
-          "123" }'
+          curl --request POST \ --url
+          https://pwn-papf-v4.herokuapp.com/site//auth/registro \ --header
+          'Content-Type: application/json' \ --data ' { "nome": "teste login",
+          "email": "pedrinfreitas@gmail.com", "login": "teste", "senha": "123"
+          }'
         </p>
       </details>
 
       <details>
         <summary class="color-post">POST - LOGIN</summary>
         <p>
-          curl --request POST \ --url http://localhost:3333/auth/login \
-          --header 'Content-Type: application/json' \ --data ' { "login":
-          "teste", "senha": "123" }'
+          curl --request POST \ --url
+          https://pwn-papf-v4.herokuapp.com/site//auth/login \ --header
+          'Content-Type: application/json' \ --data ' { "login": "teste",
+          "senha": "123" }'
         </p>
       </details>
 
@@ -39,12 +41,18 @@
 
       <details>
         <summary class="color-get">GET - LISTA DE ALUNOS</summary>
-        <p>curl --request GET \ --url http://localhost:3333/api/alunos</p>
+        <p>
+          curl --request GET \ --url
+          https://pwn-papf-v4.herokuapp.com/site//api/alunos
+        </p>
       </details>
 
       <details>
         <summary class="color-get">GET - ALUNO PELO ID - checkToken</summary>
-        <p>curl --request GET \ --url http://localhost:3333/api/alunos/1</p>
+        <p>
+          curl --request GET \ --url
+          https://pwn-papf-v4.herokuapp.com/site//api/alunos/1
+        </p>
       </details>
 
       <details>
@@ -52,11 +60,11 @@
           POST - CRIAR ALUNO - checkToken + isAdmin
         </summary>
         <p>
-          curl --request POST \ --url http://localhost:3333/api/alunos \
-          --header 'Content-Type: application/json' \ --data ' { "nome": "Pedro
-          Antonio 3", "email": "pedrinfreitas@gmail.com", "celular":
-          "24999998129", "idade": 33, "objetivo": "hipertrofia", "peso": "80.00"
-          }'
+          curl --request POST \ --url
+          https://pwn-papf-v4.herokuapp.com/site//api/alunos \ --header
+          'Content-Type: application/json' \ --data ' { "nome": "Pedro Antonio
+          3", "email": "pedrinfreitas@gmail.com", "celular": "24999998129",
+          "idade": 33, "objetivo": "hipertrofia", "peso": "80.00" }'
         </p>
       </details>
 
@@ -65,11 +73,11 @@
           PUT - ATUALIZAR ALUNO PELO ID - checkToken + isAdmin
         </summary>
         <p>
-          curl --request PUT \ --url http://localhost:3333/api/alunos/2 \
-          --header 'Content-Type: application/json' \ --data ' { "nome": "Pedro
-          Antonio 355", "email": "pedrinfreitas@gmail.com", "celular":
-          "24999998129", "idade": 33, "objetivo": "hipertrofia", "peso": "80.00"
-          }'
+          curl --request PUT \ --url
+          https://pwn-papf-v4.herokuapp.com/site//api/alunos/2 \ --header
+          'Content-Type: application/json' \ --data ' { "nome": "Pedro Antonio
+          355", "email": "pedrinfreitas@gmail.com", "celular": "24999998129",
+          "idade": 33, "objetivo": "hipertrofia", "peso": "80.00" }'
         </p>
       </details>
 
@@ -77,7 +85,10 @@
         <summary class="color-del">
           DELETE - DELETEAR ALUNO PELO ID - checkToken + isAdmin
         </summary>
-        <p>curl --request DELETE \ --url http://localhost:3333/api/alunos/2</p>
+        <p>
+          curl --request DELETE \ --url
+          https://pwn-papf-v4.herokuapp.com/site//api/alunos/2
+        </p>
       </details>
     </main>
     <footer></footer>
