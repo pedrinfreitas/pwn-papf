@@ -22,9 +22,7 @@ app.get("/", function (req, res) {
       <h1>Ops... estamos em construção...</h1>
       <h2>tente alguns desses links:</h2>
       <div style="display: flex; flex-direction: column">
-        <a href="http://localhost:3333/api/alunos">Alunos</a>
-        <a href="http://localhost:3333/api/1">Aluno id:1</a>
-        <a href="localhost:3000/">Autenticação</a>
+        <a href="https://pwn-papf-v4.herokuapp.com/">Acesse aqui</a>        
       </div>
     </section>
   `);
