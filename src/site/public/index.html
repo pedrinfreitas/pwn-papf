@@ -20,7 +20,7 @@
         <summary class="color-post">POST - REGISTRO</summary>
         <p>
           curl --request POST \ --url
-          https://pwn-papf-v4.herokuapp.com/site//auth/registro \ --header
+          https://pwn-papf-v4.herokuapp.com/auth/registro \ --header
           'Content-Type: application/json' \ --data ' { "nome": "teste login",
           "email": "pedrinfreitas@gmail.com", "login": "teste", "senha": "123"
           }'
@@ -31,9 +31,8 @@
         <summary class="color-post">POST - LOGIN</summary>
         <p>
           curl --request POST \ --url
-          https://pwn-papf-v4.herokuapp.com/site//auth/login \ --header
-          'Content-Type: application/json' \ --data ' { "login": "teste",
-          "senha": "123" }'
+          https://pwn-papf-v4.herokuapp.com/auth/login \ --header 'Content-Type:
+          application/json' \ --data ' { "login": "teste", "senha": "123" }'
         </p>
       </details>
 
@@ -43,7 +42,7 @@
         <summary class="color-get">GET - LISTA DE ALUNOS</summary>
         <p>
           curl --request GET \ --url
-          https://pwn-papf-v4.herokuapp.com/site//api/alunos
+          https://pwn-papf-v4.herokuapp.com/api/alunos
         </p>
       </details>
 
@@ -51,7 +50,7 @@
         <summary class="color-get">GET - ALUNO PELO ID - checkToken</summary>
         <p>
           curl --request GET \ --url
-          https://pwn-papf-v4.herokuapp.com/site//api/alunos/1
+          https://pwn-papf-v4.herokuapp.com/api/alunos/1
         </p>
       </details>
 
@@ -61,10 +60,10 @@
         </summary>
         <p>
           curl --request POST \ --url
-          https://pwn-papf-v4.herokuapp.com/site//api/alunos \ --header
-          'Content-Type: application/json' \ --data ' { "nome": "Pedro Antonio
-          3", "email": "pedrinfreitas@gmail.com", "celular": "24999998129",
-          "idade": 33, "objetivo": "hipertrofia", "peso": "80.00" }'
+          https://pwn-papf-v4.herokuapp.com/api/alunos \ --header 'Content-Type:
+          application/json' \ --data ' { "nome": "Pedro Antonio 3", "email":
+          "pedrinfreitas@gmail.com", "celular": "24999998129", "idade": 33,
+          "objetivo": "hipertrofia", "peso": "80.00" }'
         </p>
       </details>
 
@@ -74,7 +73,7 @@
         </summary>
         <p>
           curl --request PUT \ --url
-          https://pwn-papf-v4.herokuapp.com/site//api/alunos/2 \ --header
+          https://pwn-papf-v4.herokuapp.com/api/alunos/2 \ --header
           'Content-Type: application/json' \ --data ' { "nome": "Pedro Antonio
           355", "email": "pedrinfreitas@gmail.com", "celular": "24999998129",
           "idade": 33, "objetivo": "hipertrofia", "peso": "80.00" }'
@@ -87,7 +86,7 @@
         </summary>
         <p>
           curl --request DELETE \ --url
-          https://pwn-papf-v4.herokuapp.com/site//api/alunos/2
+          https://pwn-papf-v4.herokuapp.com/api/alunos/2
         </p>
       </details>
     </main>
