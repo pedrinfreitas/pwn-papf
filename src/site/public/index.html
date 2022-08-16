@@ -20,7 +20,7 @@
         <summary class="color-post">POST - REGISTRO</summary>
         <p>
           curl --request POST \ --url
-          https://pwn-papf-v4.herokuapp.com/auth/registro \ --header
+          https://pwn-papf-v4.herokuapp.com/api/registro \ --header
           'Content-Type: application/json' \ --data ' { "nome": "teste login",
           "email": "pedrinfreitas@gmail.com", "login": "teste", "senha": "123"
           }'
@@ -31,7 +31,7 @@
         <summary class="color-post">POST - LOGIN</summary>
         <p>
           curl --request POST \ --url
-          https://pwn-papf-v4.herokuapp.com/auth/login \ --header 'Content-Type:
+          https://pwn-papf-v4.herokuapp.com/api/login \ --header 'Content-Type:
           application/json' \ --data ' { "login": "teste", "senha": "123" }'
         </p>
       </details>
@@ -39,54 +39,42 @@
       <hr />
 
       <details>
-        <summary class="color-get">GET - LISTA DE ALUNOS</summary>
+        <summary class="color-get">GET - LISTA DE USUÁRIOS</summary>
         <p>
           curl --request GET \ --url
-          https://pwn-papf-v4.herokuapp.com/api/alunos
+          https://pwn-papf-v4.herokuapp.com/api/usuarios
         </p>
       </details>
 
       <details>
-        <summary class="color-get">GET - ALUNO PELO ID - checkToken</summary>
+        <summary class="color-get">GET - USUÁRIO PELO ID - checkToken</summary>
         <p>
           curl --request GET \ --url
-          https://pwn-papf-v4.herokuapp.com/api/alunos/1
-        </p>
-      </details>
-
-      <details>
-        <summary class="color-post">
-          POST - CRIAR ALUNO - checkToken + isAdmin
-        </summary>
-        <p>
-          curl --request POST \ --url
-          https://pwn-papf-v4.herokuapp.com/api/alunos \ --header 'Content-Type:
-          application/json' \ --data ' { "nome": "Pedro Antonio 3", "email":
-          "pedrinfreitas@gmail.com", "celular": "24999998129", "idade": 33,
-          "objetivo": "hipertrofia", "peso": "80.00" }'
+          https://pwn-papf-v4.herokuapp.com/api/usuario/1
         </p>
       </details>
 
       <details>
         <summary class="color-put">
-          PUT - ATUALIZAR ALUNO PELO ID - checkToken + isAdmin
+          PUT - ATUALIZAR USUÁRIO PELO ID - checkToken
         </summary>
         <p>
           curl --request PUT \ --url
-          https://pwn-papf-v4.herokuapp.com/api/alunos/2 \ --header
-          'Content-Type: application/json' \ --data ' { "nome": "Pedro Antonio
-          355", "email": "pedrinfreitas@gmail.com", "celular": "24999998129",
-          "idade": 33, "objetivo": "hipertrofia", "peso": "80.00" }'
+          https://pwn-papf-v4.herokuapp.com/api/usuario/1 \ --header
+          'Authorization: Bearer [token]' \ --header 'Content-Type:
+          application/json' \ --data ' { "nome": "Pedro Antonio 2", "email":
+          "pedrinfreitas2@gmail.com", "login": "user", "senha": "12345",
+          "roles": "ADMIN" }'
         </p>
       </details>
 
       <details>
         <summary class="color-del">
-          DELETE - DELETEAR ALUNO PELO ID - checkToken + isAdmin
+          DELETE - DELETEAR USUÁRIO PELO ID - checkToken + isAdmin
         </summary>
         <p>
           curl --request DELETE \ --url
-          https://pwn-papf-v4.herokuapp.com/api/alunos/2
+          https://pwn-papf-v4.herokuapp.com/api/usuarios/1
         </p>
       </details>
     </main>

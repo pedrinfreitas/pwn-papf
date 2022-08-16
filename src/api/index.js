@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const knex = require("../db/knex");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const routesApi = express.Router();
 
@@ -24,6 +25,7 @@ const checkToken = (req, res, next) => {
   }
 };
 
+// Checkar admin
 const isAdmin = (req, res, next) => {
   knex("usuarios")
     .where({ id: req.userId })
@@ -48,26 +50,81 @@ const isAdmin = (req, res, next) => {
     });
 };
 
-// Incluir um aluno CREATE POST / alunos
-routesApi.post("/alunos", checkToken, isAdmin, (req, res) => {
-  const { nome, email, celular, idade, objetivo, peso } = req.body;
+const fnIsAdmin = (id) => {
+  knex("usuarios")
+    .where({ id })
+    .first()
+    .then((usuario) => {
+      if (usuario) {
+        const roles = usuario.roles.split(";");
+        const adminRole = roles.find((i) => i === "ADMIN");
+        if (adminRole === "ADMIN") {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    })
+    .catch((_err) => {
+      return false;
+    });
+};
 
-  if (!nome || !email || !celular || !idade || !objetivo || !peso) {
+// Login - POST
+routesApi.post("/login", (req, res) => {
+  const { login, senha } = req.body;
+
+  knex("usuarios")
+    .where({ login })
+    .first()
+    .then((usuario) => {
+      if (usuario) {
+        const comparaSenha = bcrypt.compareSync(senha, usuario.senha);
+        if (comparaSenha) {
+          let token = jwt.sign({ id: usuario.id }, process.env.ENV_SECRET_KEY, {
+            expiresIn: 300,
+          });
+          res
+            .status(200)
+            .json({
+              id: usuario.id,
+              token: token,
+            })
+            .end();
+        } else {
+          res
+            .status(401)
+            .json({ message: "Ops... Login ou senha incorretos..." })
+            .end();
+        }
+      } else {
+        res
+          .status(401)
+          .json({ message: "Ops... Login ou senha incorretos..." })
+          .end();
+      }
+    })
+    .catch((err) => res.status(500).json({ message: `Ops.. ${err.message}` }));
+});
+
+// Registro - POST
+routesApi.post("/registro", (req, res) => {
+  const { nome, email, login, senha } = req.body;
+
+  if (!nome || !email || !login || !senha) {
     return res.status(400).json({ error: "Ops, faltou preencher algum dado." });
   }
 
-  const criarAluno = {
+  const criarUsuario = {
     nome,
     email,
-    celular,
-    idade,
-    objetivo,
-    peso,
+    login,
+    senha: bcrypt.hashSync(senha, 8),
   };
 
-  return knex("alunos")
-    .insert(criarAluno, "*")
-    .then((aluno) => res.status(201).json(aluno))
+  knex("usuarios")
+    .insert(criarUsuario, "*")
+    .then((usuario) => res.status(201).json(usuario))
     .catch((err) => {
       res.status(500).json({
         message: `Ops, algo deu errado, ${err.message}`,
@@ -75,10 +132,19 @@ routesApi.post("/alunos", checkToken, isAdmin, (req, res) => {
     });
 });
 
-// Obter a lista de alunos RETRIEVE GET / alunos
-routesApi.get("/alunos", (req, res) => {
-  return knex("alunos")
-    .then((alunos) => res.json(alunos))
+// Lista - GET
+routesApi.get("/usuarios", (_req, res) => {
+  return knex("usuarios")
+    .select(
+      "id",
+      "nome",
+      "email",
+      "login",
+      "roles",
+      "criado_em",
+      "atualizado_em"
+    )
+    .then((usuarios) => res.json(usuarios))
     .catch((err) => {
       res.status(500).json({
         message: `Ops, algo deu errado, ${err.message}`,
@@ -86,14 +152,23 @@ routesApi.get("/alunos", (req, res) => {
     });
 });
 
-// Obter um aluno específico RETRIEVE GET / alunos /:id
-routesApi.get("/alunos/:id", checkToken, (req, res) => {
+// ID - GET
+routesApi.get("/usuario/:id", checkToken, (req, res) => {
   let { id } = req.params;
 
-  return knex("alunos")
+  return knex("usuarios")
+    .select(
+      "id",
+      "nome",
+      "email",
+      "login",
+      "roles",
+      "criado_em",
+      "atualizado_em"
+    )
     .where({ id })
     .first()
-    .then((aluno) => res.json(aluno))
+    .then((usuario) => res.json(usuario))
     .catch((err) => {
       res.status(500).json({
         message: `Ops, algo deu errado, ${err.message}`,
@@ -101,31 +176,34 @@ routesApi.get("/alunos/:id", checkToken, (req, res) => {
     });
 });
 
-// Alterar um aluno UPDATE PUT / alunos /:id
-routesApi.put("/alunos/:id", checkToken, isAdmin, (req, res) => {
+// Atualiza - PUT
+routesApi.put("/usuario/:id", checkToken, (req, res) => {
   const { id } = req.params;
-  const { nome, email, celular, idade, objetivo, peso } = req.body;
-  const atualizado_em = knex.fn.now();
+  const { nome, senha, email, login, roles } = req.body;
 
-  return knex("alunos")
+  let atualizaUsuario = {
+    nome,
+    senha: bcrypt.hashSync(senha, 8),
+    email,
+    login,
+    atualizado_em: knex.fn.now(),
+  };
+
+  //Verifica se usuario é admin para poder mudar a ROLES
+  if (fnIsAdmin(id)) {
+    atualizaUsuario.push(roles);
+  }
+
+  //TODO: verificar se é o id autenticado para alterar a senha (imperdir mudança de senha de outro usuario)
+
+  return knex("usuarios")
     .where({ id })
-    .update(
-      {
-        nome,
-        email,
-        celular,
-        idade,
-        objetivo,
-        peso,
-        atualizado_em,
-      },
-      "*"
-    )
-    .then((aluno) => {
-      if (aluno && aluno[0]) {
-        res.status(200).json(aluno);
+    .update(atualizaUsuario, "*")
+    .then((usuario) => {
+      if (usuario && usuario[0]) {
+        res.status(200).json(usuario);
       } else {
-        res.status(400).json({ error: "Aluno não encontrado!" });
+        res.status(400).json({ error: "Usuário não encontrado!" });
       }
     })
     .catch((err) => {
@@ -135,16 +213,16 @@ routesApi.put("/alunos/:id", checkToken, isAdmin, (req, res) => {
     });
 });
 
-// Excluir um aluno DELETE DELETE /alunos/:id
-routesApi.delete("/alunos/:id", checkToken, isAdmin, (req, res) => {
+// Excluir - DELETE
+routesApi.delete("/usuario/:id", checkToken, isAdmin, (req, res) => {
   const { id } = req.params;
 
-  return knex("alunos")
+  return knex("usuarios")
     .where({ id })
     .del("*")
-    .then((aluno) => {
-      if (aluno && aluno[0]) {
-        res.status(200).json(aluno);
+    .then((usuario) => {
+      if (usuario && usuario[0]) {
+        res.status(200).json(usuario);
       } else {
         res.status(400).json({ error: "aluno não encontrado!" });
       }
