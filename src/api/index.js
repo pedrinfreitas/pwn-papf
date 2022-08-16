@@ -1,11 +1,55 @@
 require("dotenv").config();
 const express = require("express");
 const knex = require("../db/knex");
+const jwt = require("jsonwebtoken");
 
 const routesApi = express.Router();
 
+// Checar token
+const checkToken = (req, res, next) => {
+  const authHeader = req.get("Authorization");
+  if (!authHeader) {
+    res.status(403).json({ message: "Ops... Token requerida!" }).end();
+  } else {
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.ENV_SECRET_KEY, (err, decodedToken) => {
+      if (err) {
+        res.status(401).json({ message: "Ops... Token invalida!" }).end();
+      } else {
+        req.token = decodedToken;
+        req.userId = decodedToken.id;
+        next();
+      }
+    });
+  }
+};
+
+const isAdmin = (req, res, next) => {
+  knex("usuarios")
+    .where({ id: req.userId })
+    .first()
+    .then((usuario) => {
+      if (usuario) {
+        let roles = usuario.roles.split(";");
+        let adminRole = roles.find((i) => i === "ADMIN");
+        if (adminRole === "ADMIN") {
+          next();
+          return;
+        } else {
+          res.status(403).json({ message: "Ops... Role de ADMIN requerida" });
+          return;
+        }
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Ops... Erro ao verificar roles de usuário - " + err.message,
+      });
+    });
+};
+
 // Incluir um aluno CREATE POST / alunos
-routesApi.post("/alunos", (req, res) => {
+routesApi.post("/alunos", checkToken, isAdmin, (req, res) => {
   const { nome, email, celular, idade, objetivo, peso } = req.body;
 
   if (!nome || !email || !celular || !idade || !objetivo || !peso) {
@@ -43,7 +87,7 @@ routesApi.get("/alunos", (req, res) => {
 });
 
 // Obter um aluno específico RETRIEVE GET / alunos /:id
-routesApi.get("/alunos/:id", (req, res) => {
+routesApi.get("/alunos/:id", checkToken, (req, res) => {
   let { id } = req.params;
 
   return knex("alunos")
@@ -58,7 +102,7 @@ routesApi.get("/alunos/:id", (req, res) => {
 });
 
 // Alterar um aluno UPDATE PUT / alunos /:id
-routesApi.put("/alunos/:id", (req, res) => {
+routesApi.put("/alunos/:id", checkToken, isAdmin, (req, res) => {
   const { id } = req.params;
   const { nome, email, celular, idade, objetivo, peso } = req.body;
   const atualizado_em = knex.fn.now();
@@ -92,7 +136,7 @@ routesApi.put("/alunos/:id", (req, res) => {
 });
 
 // Excluir um aluno DELETE DELETE /alunos/:id
-routesApi.delete("/alunos/:id", (req, res) => {
+routesApi.delete("/alunos/:id", checkToken, isAdmin, (req, res) => {
   const { id } = req.params;
 
   return knex("alunos")

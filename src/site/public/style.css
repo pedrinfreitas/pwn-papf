@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+}
+
+header {
+  text-align: center;
+}
+
+main {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+main details {
+  padding: 0.5rem;
+}
+
+.color-post {
+  color: green;
+}
+.color-get {
+  color: blue;
+}
+.color-put {
+  color: orange;
+}
+.color-del {
+  color: red;
+}

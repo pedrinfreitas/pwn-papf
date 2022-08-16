@@ -1,11 +1,11 @@
 curl --request GET \
- --url http://localhost:3333/api/alunos/1
+ --url https://pwn-papf-v3.herokuapp.com/api/alunos/1
 
 curl --request GET \
- --url http://localhost:3333/api/alunos
+ --url https://pwn-papf-v3.herokuapp.com/api/alunos
 
 curl --request POST \
- --url http://localhost:3333/api/alunos \
+ --url https://pwn-papf-v3.herokuapp.com/api/alunos \
  --header 'Content-Type: application/json' \
  --data ' {  
  "nome": "Nome de teste",
@@ -17,10 +17,10 @@ curl --request POST \
 }'
 
 curl --request DELETE \
- --url http://localhost:3333/api/alunos/2
+ --url https://pwn-papf-v3.herokuapp.com/api/alunos/2
 
 curl --request PUT \
- --url http://localhost:3333/api/alunos/2 \
+ --url https://pwn-papf-v3.herokuapp.com/api/alunos/2 \
  --header 'Content-Type: application/json' \
  --data ' {  
  "nome": "Nome de teste 2",
